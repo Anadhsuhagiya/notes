@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:notes/Model.dart';
 import 'package:notes/create_note.dart';
 import 'package:notes/first.dart';
@@ -85,10 +86,10 @@ class _list_firstState extends State<list_first> {
                     Center(
                       child: Text(
                         greetingMessage(),
-                        style: TextStyle(
+                        style: GoogleFonts.montserrat(textStyle: TextStyle(
                             color: Colors.orange,
                             fontWeight: FontWeight.bold,
-                            fontSize: 30),
+                            fontSize: 30)),
                       ),
                     ),
                     IconButton(
@@ -102,8 +103,8 @@ class _list_firstState extends State<list_first> {
                                 ListTile(
                                   title: Text(
                                     "Gridview",
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 20),
+                                    style: GoogleFonts.montserrat(textStyle: TextStyle(
+                                        color: Colors.white, fontSize: 20)),
                                   ),
                                   onTap: () {
                                     Navigator.pop(context);
@@ -144,7 +145,7 @@ class _list_firstState extends State<list_first> {
                     cursorColor: Colors.orange,
                     decoration: InputDecoration(
                         hintText: "Search",
-                        hintStyle: TextStyle(color: Color(0xff343434)),
+                        hintStyle: GoogleFonts.montserrat(textStyle: TextStyle(color: Color(0xff343434))),
                         prefixIcon: Icon(
                           Icons.search,
                           color: Colors.white,
@@ -178,8 +179,8 @@ class _list_firstState extends State<list_first> {
                                                   ListTile(
                                                     title: Text(
                                                       "Delete",
-                                                      style: TextStyle(
-                                                          color: Colors.white),
+                                                      style: GoogleFonts.montserrat(textStyle: TextStyle(
+                                                          color: Colors.white)),
                                                     ),
                                                     onTap: () {
                                                       Navigator.pop(context);
@@ -226,16 +227,16 @@ class _list_firstState extends State<list_first> {
                                             children: [
                                               Text(
                                                 "${note_title}",
-                                                style: TextStyle(
+                                                style: GoogleFonts.montserrat(textStyle: TextStyle(
                                                     color: Colors.white,
-                                                    fontSize: 20),
+                                                    fontSize: 20)),
                                               ),
                                               Text(
                                                 "\n${note}",
                                                 maxLines: 10,
-                                                style: TextStyle(
+                                                style: GoogleFonts.montserrat(textStyle: TextStyle(
                                                     color: Color(0xff797979),
-                                                    fontSize: 10),
+                                                    fontSize: 10)),
                                               ),
                                             ],
                                           ),

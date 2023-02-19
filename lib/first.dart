@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:notes/Model.dart';
 import 'package:notes/create_note.dart';
 import 'package:notes/list_first.dart';
@@ -14,7 +16,6 @@ class first extends StatefulWidget {
 }
 
 class _firstState extends State<first> {
-
   String greetingMessage() {
     var timeNow = DateTime.now().hour;
 
@@ -46,7 +47,7 @@ class _firstState extends State<first> {
 
       String qry = "SELECT * FROM notes ORDER BY id DESC";
       db!.rawQuery(qry).then((value1) {
-            l = value1;
+        l = value1;
         print(l);
 
         setState(() {
@@ -58,17 +59,16 @@ class _firstState extends State<first> {
     temp.addAll(l);
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Swipe(
         onSwipeLeft: () {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-            return list_first();
-          },));
+          Navigator.pushReplacement(context, MaterialPageRoute(
+            builder: (context) {
+              return list_first();
+            },
+          ));
         },
         child: Scaffold(
           backgroundColor: Colors.black,
@@ -91,224 +91,203 @@ class _firstState extends State<first> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Center(
-                      child: Text(
-                        greetingMessage(),
-                        style: TextStyle(
-                            color: Colors.orange,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30),
-                      ),
+                      child: Text(greetingMessage(),
+                          style: GoogleFonts.montserrat(
+                            textStyle: TextStyle(
+                                color: Colors.orange,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 30),
+                          )),
                     ),
-                    IconButton(onPressed: () {
-                      showDialog(context: context, builder: (context) {
-                        return SimpleDialog(
-                          backgroundColor: Color(0xff363636),
-                          children: [
-                            ListTile(
-                              title: Text("Listview",style: TextStyle(color: Colors.white,fontSize: 20),),
-                              onTap: () {
-                                Navigator.pop(context);
-                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-                                  return list_first();
-                                },));
-                              },
-                            )
-                          ],
+                    IconButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return SimpleDialog(
+                              backgroundColor: Color(0xff252525),
+                              children: [
+                                ListTile(
+                                  title: Text("Listview",
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                            color: Colors.white, fontSize: 20),
+                                      )),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    Navigator.pushReplacement(context,
+                                        MaterialPageRoute(
+                                      builder: (context) {
+                                        return list_first();
+                                      },
+                                    ));
+                                  },
+                                )
+                              ],
+                            );
+                          },
                         );
-                      },);
-                    }, icon: Icon(Icons.menu_rounded,color: Colors.white,),)
+                      },
+                      icon: Icon(
+                        Icons.menu_rounded,
+                        color: Colors.white,
+                      ),
+                    )
                   ],
                 ),
                 Container(
                   height: 50,
                   width: double.infinity,
                   alignment: Alignment.center,
-                  padding: EdgeInsets.only(left: 20),
-                  margin: EdgeInsets.only(top: 20,left: 10, right: 10,bottom: 20),
+                  padding: EdgeInsets.only(left: 10),
+                  margin:
+                      EdgeInsets.only(top: 20, left: 5, right: 5, bottom: 20),
                   decoration: ShapeDecoration(
-                    color: Color(0xff282828),
+                      color: Color(0xff282828),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50))),
+                          borderRadius: BorderRadius.circular(20))),
                   child: TextField(
                     controller: search,
-                    style: TextStyle(color: Colors.white),
+                    style: GoogleFonts.montserrat(
+                      textStyle: TextStyle(color: Colors.white),
+                    ),
                     cursorColor: Colors.orange,
                     autofocus: false,
                     onChanged: (value) {
-
                       String val = value;
                       temp.clear();
 
-                      for(int i = 0; i < l.length; i++)
-                        {
-                          String qry = "SELECT * FROM notes where title IN('$search')";
-                          db!.rawQuery(qry).then((value2) {
-                            temp = value2;
-                          });
-                        }
-
+                      for (int i = 0; i < l.length; i++) {
+                        String qry =
+                            "SELECT * FROM notes where title IN('$search')";
+                        db!.rawQuery(qry).then((value2) {
+                          temp = value2;
+                        });
+                      }
                     },
                     decoration: InputDecoration(
                         hintText: "Search",
-                        hintStyle: TextStyle(color: Color(0xff343434)),
-                        prefixIcon: Icon(Icons.search,color: Colors.white,),
+                        hintStyle: GoogleFonts.montserrat(
+                            textStyle: TextStyle(color: Color(0xff343434))),
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: Colors.white,
+                        ),
                         prefixIconColor: Color(0xff343434),
                         border: InputBorder.none),
                   ),
                 ),
                 status
                     ? (l.length > 0)
-                        ? isSearch ? Expanded(
-                            child: Container(
+                            ? Expanded(
+                              child: Container(
                                 height: double.infinity,
                                 width: double.infinity,
-                                child: GridView.builder(
+                                child: MasonryGridView.count(
                                   itemCount: l.length,
                                   scrollDirection: Axis.vertical,
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          crossAxisSpacing: 10,
-                                          mainAxisSpacing: 10),
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 15,
+                                  crossAxisSpacing: 15,
                                   itemBuilder: (context, index) {
-                                    Map map = temp[index];
+                                    Map map = l[index];
                                     String note_title = map['title'];
                                     String note = map['note'];
                                     int id = map['id'];
 
-                                    return InkWell(
+                                    return GestureDetector(
                                       onLongPress: () {
-                                          showDialog(context: context, builder: (context) {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
                                             return SimpleDialog(
-                                              backgroundColor: Colors.black,
+                                              backgroundColor: Color(0xff252525),
                                               children: [
                                                 ListTile(
-                                                  title: Text("Delete",style: TextStyle(color: Colors.white),),
+                                                  title: Text(
+                                                    "Delete",
+                                                    style: GoogleFonts
+                                                        .montserrat(
+                                                            textStyle: TextStyle(
+                                                                color: Colors
+                                                                    .white)),
+                                                  ),
                                                   onTap: () {
                                                     Navigator.pop(context);
-                                                    String qry = "DELETE from notes where id = '$id'";
-                                                    db!.rawDelete(qry).then((value) {
-                                                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-                                                        return first();
-                                                      },));
+                                                    String qry =
+                                                        "DELETE from notes where id = '$id'";
+                                                    db!
+                                                        .rawDelete(qry)
+                                                        .then((value) {
+                                                      Navigator.pushReplacement(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                        builder: (context) {
+                                                          return first();
+                                                        },
+                                                      ));
                                                     });
                                                   },
                                                 )
                                               ],
                                             );
-                                          },);
+                                          },
+                                        );
                                       },
                                       onTap: () {
-                                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-                                          return update_note(map);
-                                        },));
+                                        Navigator.pushReplacement(context,
+                                            MaterialPageRoute(
+                                          builder: (context) {
+                                            return update_note(map);
+                                          },
+                                        ));
                                       },
-                                      child: Container(
-                                        padding: EdgeInsets.all(10),
-                                        decoration: ShapeDecoration(
-                                            color: Color(0xff282828),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(15))),
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "${note_title}",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 20),
-                                            ),
-                                            Text(
-                                              "\n${note}",maxLines: 10,
-                                              style: TextStyle(
-                                                  color: Color(0xff797979),
-                                                  fontSize: 10),
-                                            ),
-                                          ],
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(15),
+                                        child: Container(
+                                          padding: EdgeInsets.all(10),
+                                          decoration: ShapeDecoration(
+                                              color: Color(0xff282828),
+                                              shape:
+                                                  RoundedRectangleBorder()),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "${note_title}",
+                                                style: GoogleFonts.montserrat(
+                                                    textStyle: TextStyle(
+                                                      fontWeight: FontWeight.bold,
+                                                        color: Colors.white,
+                                                        fontSize: 20)),
+                                              ),
+                                              Text(
+                                                "\n${note}",
+                                                maxLines: 10,
+                                                style: GoogleFonts.montserrat(
+                                                    textStyle: TextStyle(
+                                                      fontWeight: FontWeight.bold,
+                                                        color:
+                                                            Color(0xff9d9c9c),
+                                                        fontSize: 12)),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     );
                                   },
-                                )),
-                          ) : Expanded(
-                  child: Container(
-                      height: double.infinity,
-                      width: double.infinity,
-                      child: GridView.builder(
-                        itemCount: l.length,
-                        scrollDirection: Axis.vertical,
-                        gridDelegate:
-                        SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10),
-                        itemBuilder: (context, index) {
-                          Map map = l[index];
-                          String note_title = map['title'];
-                          String note = map['note'];
-                          int id = map['id'];
-
-                          return InkWell(
-                            onLongPress: () {
-                              showDialog(context: context, builder: (context) {
-                                return SimpleDialog(
-                                  backgroundColor: Colors.black,
-                                  children: [
-                                    ListTile(
-                                      title: Text("Delete",style: TextStyle(color: Colors.white),),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                        String qry = "DELETE from notes where id = '$id'";
-                                        db!.rawDelete(qry).then((value) {
-                                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-                                            return first();
-                                          },));
-                                        });
-                                      },
-                                    )
-                                  ],
-                                );
-                              },);
-                            },
-                            onTap: () {
-                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-                                return update_note(map);
-                              },));
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                              decoration: ShapeDecoration(
-                                  color: Color(0xff282828),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                      BorderRadius.circular(15))),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "${note_title}",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20),
-                                  ),
-                                  Text(
-                                    "\n${note}",maxLines: 10,
-                                    style: TextStyle(
-                                        color: Color(0xff797979),
-                                        fontSize: 10),
-                                  ),
-                                ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      )),
-                )
+                            )
                         : Center(
                             child: Text(
                               "No Notes",
-                              style: TextStyle(color: Color(0xff6c6c6c)),
+                              style: GoogleFonts.montserrat(
+                                  textStyle:
+                                      TextStyle(color: Color(0xff6c6c6c))),
                             ),
                           )
                     : Center(

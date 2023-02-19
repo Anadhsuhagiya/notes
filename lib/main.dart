@@ -5,6 +5,5 @@ void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     home: first(),
-    theme: ThemeData(fontFamily: 'noto'),
   ));
 }
